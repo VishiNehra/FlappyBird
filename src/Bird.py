@@ -15,12 +15,13 @@ class Bird:
         self.y = y
         self.speed = speed
 
-        self.bird = pygame.image.load("..\images\Bird.png")
+        self.bird = pygame.image.load("../images/Bird.png")
         self.direction = "down"
         self.fallingDuration = 0
         self.flyingDuration = 0
         self.previousRotation = 0
 
+    # makes bird move according to current direction
     def update(self):
         if self.direction == "up":
             self.y -= self.speed
@@ -29,6 +30,7 @@ class Bird:
             self.y += self.speed
             self._handleFallingDuration()
 
+    # updates how long bird has been flying and switches direction once the bird has flown enough
     def _handleFlyingDuration(self):
         if self.flyingDuration < self.maxFlyingDuration:
             self.flyingDuration += 1
@@ -36,10 +38,12 @@ class Bird:
             self.direction = "down"
             self.flyingDuration = 0
 
+    # updates how long bird has been falling
     def _handleFallingDuration(self):
         if self.fallingDuration < self.maxFallingDuration:
             self.fallingDuration += 1
 
+    # changes direction to flying up
     def jumpUp(self):
         self.direction = "up"
         self.flyingDuration = 0
@@ -51,10 +55,12 @@ class Bird:
     def getRect(self):
         return Rect(self.x, self.y, self.width, self.height)
 
+    # returns bird's pygame object
     def getBird(self):
         # rotate bird according to how much it has fallen
         return pygame.transform.rotate(self.bird, self._calculateRotation())
 
+    # calculates how much rotation to apply to bird according to state of falling/flying
     def _calculateRotation(self):
         if self.direction == "down" and self.fallingDuration >= 8:
             if self.previousRotation > -90:
